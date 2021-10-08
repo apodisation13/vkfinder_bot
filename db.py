@@ -1,9 +1,12 @@
 import sqlalchemy as sq
 from sqlalchemy.orm import sessionmaker
+from os import getcwd
 
 
-engine = sq.create_engine('sqlite://///home/james/PycharmProjects/vkfinder_bot/db.sqlite')
-# TODO: ссылка должна быть на относительный путь, поправить к докеру
+cwd = getcwd()
+
+engine = sq.create_engine(f'sqlite:///{cwd}/db.sqlite')
+
 
 Session = sessionmaker(bind=engine)
 session_db = Session()
@@ -16,8 +19,8 @@ if __name__ == '__main__':
 
     # q = session_db.execute('drop table vkfinder')
 
-    q = session_db.execute('DELETE FROM vkfinder')
-    session_db.commit()
+    # q = session_db.execute('DELETE FROM vkfinder')
+    # session_db.commit()
 
     # from models import *
     #
