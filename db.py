@@ -19,8 +19,8 @@ if __name__ == '__main__':
 
     # q = session_db.execute('drop table vkfinder')
 
-    # q = session_db.execute('DELETE FROM vkfinder')
-    # session_db.commit()
+    q = session_db.execute('DELETE FROM vkfinder')
+    session_db.commit()
 
     # from models import *
     #

@@ -51,9 +51,11 @@ def get_user_data(user_id):
                                {'user_ids': user_id,
                                 'fields': 'city,bdate,sex,country'}
                                )
-    if user_data[0].get('city') is dict:  # если там указан город, сразу оставить от него только id города
+    if user_data[0].get('city'):  # если там указан город, сразу оставить от него только id города
         city_id = user_data[0]['city']['id']
+        print(city_id)
         user_data[0]['city'] = city_id
+        print(user_data[0]['city'])
     return user_data[0]  # ибо там формат [{}]
 
 
@@ -67,6 +69,7 @@ def data_check(event, user_data):
     if bdate:
         age = date.today().year - int(bdate.split('.')[-1])  # возраст пользователя из сессии
         user_data['age'] = age
+        print(age)
     else:
         age = None
         user_data['age'] = None
@@ -125,6 +128,7 @@ def search_users(event, user_data):
 
         q = session_db.query(Vkfinder.url).filter(Vkfinder.user_id == str(event.user_id)).all()
         result = [el[0] for el in q]  # список пользователей из базы для данного пользователя
+        print(result, 'СПИСОК ЮЗЕРОВ')
         for person in request['items']:
             print(person)
 
@@ -132,13 +136,15 @@ def search_users(event, user_data):
                 link = f"vk.com/id{person['id']}"  # vk.com/id83915036
                 if link not in result:  # если в базе такого нету, тогда ищем фоточки, и добавляем в базу
 
-                    result = get_photos(person['id'])
-                    if result:  # только если есть фоточки, иначе нафиг))
+                    photos = get_photos(person['id'])
+                    print(photos)
+                    if photos:  # только если есть фоточки, иначе нафиг))
                         new = Vkfinder(user_id=str(event.user_id), url=link)
                         session_db.add(new)
                         write_message(event.user_id, 'очередной человек')
                         write_message(event.user_id, link)
-                        for url in result:
+                        for url in photos:
+                            print(url, 'картиночка')
                             write_message(event.user_id, url)
 
         session_db.commit()
@@ -164,6 +170,7 @@ def get_photos(user_id):
         r.append([like, link])
     r.sort(reverse=True)
     urls = [el[1] for el in r[:3]]
+    print(urls)
     return urls
 
 
