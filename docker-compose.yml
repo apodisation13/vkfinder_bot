@@ -1,0 +1,13 @@
+version: "3"
+
+
+services:
+  backend:
+    image: vkfinder_bot_backend
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/vkfinder_bot
+#    ports:
+#      - "5000:5000"
